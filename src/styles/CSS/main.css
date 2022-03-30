@@ -1,0 +1,10 @@
+@import url('https://fonts.googleapis.com/css2?family=Gideon+Roman&family=Inter:wght@700&family=Nunito&family=Oswald:wght@500&family=Red+Hat+Text:wght@700&family=Roboto+Mono:wght@300&family=Rubik:wght@400;500&display=swap');
+
+*{
+    margin: 0;
+    padding: 0;
+    font-family: 'Nunito', sans-serif;
+}
+body{
+    background-color: #16161a;
+}
