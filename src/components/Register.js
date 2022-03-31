@@ -13,10 +13,11 @@ const Register = () => {
   const [newUser, setNewUser] = useState({
     email: '',
     password: '',
-    name: ''
+    name: '',
+    img: ''
   })
 
-  const { email, password, name } = newUser
+  const { email, password, name, img } = newUser
 
   const handleSubmit = e => {
     e.preventDefault()
@@ -96,6 +97,17 @@ const Register = () => {
                 name="password"
                 onChange={handleChange}
                 value={password}
+              />
+
+            </InputContainer>
+            <InputContainer>
+              <label>Imagen de perfil (opcional)</label>
+              <Input
+                type="text"
+                placeholder='Ingrese el link de la imagen'
+                name="img"
+                onChange={handleChange}
+                value={img}
               />
             </InputContainer>
 

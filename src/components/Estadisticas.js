@@ -16,9 +16,7 @@ const Estadisticas = () => {
 
   const {studyTime, answersContested, correctAnswers, wrongAnswers} = stats
   
-  // if(actualSession){
-
-  // }
+  
 
   return (
     <ContainerEstd>

@@ -9,33 +9,46 @@ const Perfil = () => {
   const [perfil, setPerfil] = useState({
     name: '',
     email: '',
-    imgUser: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYu9wFEOviVSzqkohBw2G3ZIVqMeow52YgqVhtuS7hOeNMl2D2zItDRZ2VCpAjwdhj2Ds&usqp=CAU'
+    imgUser: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYu9wFEOviVSzqkohBw2G3ZIVqMeow52YgqVhtuS7hOeNMl2D2zItDRZ2VCpAjwdhj2Ds&usqp=CAU',
+    textButton: 'Cerrar sesión'
   })
 
-  const { name, email, imgUser } = perfil
-
-  let textButton = 'Cerrar sesión'
+  const { name, email, imgUser, textButton } = perfil
 
   const actualSession = JSON.parse(localStorage.getItem('ActualSession'))
+  console.log(actualSession);
 
   useEffect(() => {
     setActualPerfil()
   }, [])
-  
+
   const setActualPerfil = () => {
 
-    console.log(actualSession)
+    if (actualSession) {
 
-    if (actualSession !== null) {
       setPerfil({
+        ...perfil,
         name: actualSession.name,
-        email: actualSession.email,
-        imgUser: actualSession.img
+        email: actualSession.email
       })
-    } else {
-      textButton = 'Iniciar sesión'
-    }
 
+      console.log(actualSession.name);
+
+      if (actualSession.img !== false) {
+        setPerfil({
+          ...perfil,
+          name: actualSession.name,
+          email: actualSession.email,
+          imgUser: actualSession.img
+        })
+      }
+
+    } else {
+      setPerfil({
+        ...perfil,
+        textButton: "Iniciar sesión"
+      })
+    }
   }
 
 
