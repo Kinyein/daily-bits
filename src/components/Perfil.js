@@ -34,7 +34,7 @@ const Perfil = () => {
 
       console.log(actualSession.name);
 
-      if (actualSession.img !== false) {
+      if (actualSession.img !== undefined) {
         setPerfil({
           ...perfil,
           name: actualSession.name,
