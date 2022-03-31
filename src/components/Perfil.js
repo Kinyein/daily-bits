@@ -1,4 +1,4 @@
-import React, { useState } from 'react'
+import React, { useEffect, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import '../styles/CSS/perfil.css'
 import { Title } from '../styles/styledComp/estadisticas'
@@ -9,39 +9,39 @@ const Perfil = () => {
   const [perfil, setPerfil] = useState({
     name: '',
     email: '',
-    imgUser: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYu9wFEOviVSzqkohBw2G3ZIVqMeow52YgqVhtuS7hOeNMl2D2zItDRZ2VCpAjwdhj2Ds&usqp=CAU',
-    textButton: 'Cerrar sesión'
+    imgUser: 'https://encrypted-tbn0.gstatic.com/images?q=tbn:ANd9GcTYu9wFEOviVSzqkohBw2G3ZIVqMeow52YgqVhtuS7hOeNMl2D2zItDRZ2VCpAjwdhj2Ds&usqp=CAU'
   })
 
-  const {name, email, imgUser, textButton} = perfil
+  const { name, email, imgUser } = perfil
+
+  let textButton = 'Cerrar sesión'
 
   const actualSession = JSON.parse(localStorage.getItem('ActualSession'))
 
-  if (actualSession) {
+  useEffect(() => {
+    setActualPerfil()
+  }, [])
+  
+  const setActualPerfil = () => {
 
-    setPerfil({
-      ...perfil,
-      name: actualSession.name,
-      email: actualSession.email,
-    })
+    console.log(actualSession)
 
-    if(actualSession.img){
+    if (actualSession !== null) {
       setPerfil({
-        ...perfil,
+        name: actualSession.name,
+        email: actualSession.email,
         imgUser: actualSession.img
       })
-  }else{
-    setPerfil({
-      ...perfil,
-      textButton: "Iniciar sesión"
-    })
+    } else {
+      textButton = 'Iniciar sesión'
+    }
+
   }
-}
+
 
   const navigate = useNavigate()
 
   const closeActualSession = () => {
-    
     localStorage.removeItem('ActualSession')
     navigate("/login")
   }
@@ -56,7 +56,7 @@ const Perfil = () => {
           <Name>{name}</Name>
           <p>{email}</p>
         </TextContent>
-        <CloseSession className='closeSession' onClick={() =>  closeActualSession()}>{textButton}</CloseSession>
+        <CloseSession className='closeSession' onClick={() => closeActualSession()}>{textButton}</CloseSession>
       </DataContainer>
 
     </PerfilContainer>
