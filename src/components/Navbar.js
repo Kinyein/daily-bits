@@ -10,7 +10,7 @@ const Navbar = () => {
     <div>
       <NavbarS>
         
-        <Link className='link' to="/"><BiHomeAlt className='icon' />Home</Link>
+        <Link className='link' to="/home"><BiHomeAlt className='icon' />Home</Link>
         
         <Link className='link' to="/estadisticas"><FiActivity className='icon' />Estadisticas</Link>
         

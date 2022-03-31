@@ -12,7 +12,8 @@ export const DataContainer = styled.div`
     margin: 50px 0;
 `
 export const ImgPerfil = styled.img`
-    width: 70px;
+    border-radius: 100%;
+    width: 90px;
 `
 export const TextContent = styled.div`
     text-align: center;

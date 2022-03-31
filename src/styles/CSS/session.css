@@ -1,0 +1,12 @@
+div div form button.sessionButton:active{
+    background-color: #171e22;
+    color: rgb(82, 80, 80);
+    transform: scale(.99);
+    transition: .1s;
+}
+div div a{
+    color: #2cb67d;
+}
+div div p a{
+    color: #2cb67d;
+}
