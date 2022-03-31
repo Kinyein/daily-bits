@@ -1,6 +1,6 @@
 import axios from 'axios'
 import React, { useEffect, useState } from 'react'
-import {useNavigate } from 'react-router-dom'
+import { useNavigate } from 'react-router-dom'
 import { GrClose } from 'react-icons/gr'
 import Swal from 'sweetalert2'
 import { url } from '../helpers/urls'
@@ -17,7 +17,7 @@ const Questions = () => {
     c: '',
     img: '',
     correct: '',
-    selected: '',
+    selected: 'null',
     numberQuestion: 0,
     lives: 5
   })
@@ -32,6 +32,11 @@ const Questions = () => {
     axios.get(url)
       .then(resp => {
         let data = resp.data
+        
+
+        if(data[numberQuestion] === undefined){
+          handleReturn()
+        }
 
         setQuestions({
           ...questionObj,
@@ -48,7 +53,7 @@ const Questions = () => {
         console.log(error);
       })
   }
-  
+
   const handleChange = e => {
     setQuestions({
       ...questionObj,
@@ -59,8 +64,9 @@ const Questions = () => {
   const handleSubmit = e => {
     e.preventDefault();
     e.target.reset()
+    nextQuestion()
 
-    if (selected == correct) {
+    if (selected === correct) {
       Swal.fire({
         position: 'bottom',
         icon: 'success',
@@ -69,30 +75,55 @@ const Questions = () => {
         timer: 1700
       })
 
+    }else if(selected === "null"){
+
+      setQuestions({
+        ...questionObj,
+        numberQuestion: numberQuestion 
+      })
+
+      Swal.fire({
+        position: 'bottom',
+        title: 'Selecciona una respuesta',
+        showConfirmButton: false,
+        timer: 1400
+      })
     } else {
       Swal.fire({
         position: 'bottom',
         icon: 'error',
-        title: `La respuesta correcta era: ${correct}`,
+        title: 'Incorrecto',
+        text: `La respuesta correcta era: ${correct}`,
         showConfirmButton: true
       })
 
-      setQuestions({
-        ...questionObj,
-        lives: lives - 1
-      })
     }
+
+    
+
+  }
+
+  const nextQuestion = () => {
 
     setQuestions({
       ...questionObj,
+      selected: 'null',
       numberQuestion: numberQuestion + 1
     })
 
+    if(selected !== correct){
+      setQuestions({
+        ...questionObj,
+        selected: 'null',
+        numberQuestion: numberQuestion + 1,
+        lives: lives - 1
+      })
+    }
   }
 
   const navigate = useNavigate()
 
-  const handleReturn = ()=>{
+  const handleReturn = () => {
     navigate(-1)
   }
 
