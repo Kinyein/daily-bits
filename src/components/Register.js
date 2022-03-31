@@ -43,6 +43,12 @@ const Register = () => {
           /* Read more about handling dismissals below */
           if (result.dismiss === Swal.DismissReason.timer) {
             console.log('I was closed by the timer')
+
+            Swal.fire({
+              icon: 'success',
+              title: 'Datos guardados correctamente',
+              text: 'Ahora peudes iniciar sesión'
+          })
           }
         })
       })

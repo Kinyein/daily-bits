@@ -44,29 +44,33 @@ const Login = () => {
 
     const validationAccount = (data) => {
         if (email !== '' && password !== '') {
+
             data.map(user => {
                 if (email === user.email && password === user.password) {
-                    localStorage.setItem('ActualSession', JSON.stringify(user)) 
+
+                    localStorage.setItem('ActualSession', JSON.stringify(user))
                     Swal.fire({
                         icon: 'success',
                         title: 'Sesion iniciada correctamente',
                         text: ''
                     })
-
                     navigate('/home')
 
                     console.log('Existe usuario');
-
+                    
                 } else {
+
                     Swal.fire({
                         icon: 'error',
                         title: 'No coinciden los datos',
                         text: 'Por favor revisa que los datos sean correctos, o crea una cuenta si no tienes una'
                     })
                     console.log('No existe usuario');
+
                 }
             })
-        }else{
+
+        } else {
             Swal.fire({
                 icon: 'error',
                 title: '',
@@ -74,9 +78,11 @@ const Login = () => {
             })
         }
 
-
         console.log(data)
+
     }
+
+
 
     return (
         <SessionContainer>

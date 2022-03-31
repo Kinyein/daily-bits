@@ -35,7 +35,7 @@ export const ImgQuestion = styled.img`
 export const AnswersForm = styled.form`
     display: flex;
     flex-direction: column; 
-    margin: 16px;
+    margin: 16px 0 80px 0;
     gap: 16px;
 `
 export const Answer = styled.label`
