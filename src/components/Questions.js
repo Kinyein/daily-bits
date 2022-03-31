@@ -1,9 +1,9 @@
 import axios from 'axios'
-import React, { useEffect, useState } from 'react'
+import React, { useEffect, useMemo, useState } from 'react'
 import { useNavigate } from 'react-router-dom'
 import { GrClose } from 'react-icons/gr'
 import Swal from 'sweetalert2'
-import { url } from '../helpers/urls'
+import { url, urlUsers } from '../helpers/urls'
 import heart from '../img/heart.svg'
 import '../styles/CSS/question.css'
 import { Answer, AnswersForm, ButtonClose, ButtonComprobar, Health, ImgQuestion, ProgressContainer, Question } from '../styles/styledComp/questions'
@@ -16,25 +16,33 @@ const Questions = () => {
     b: '',
     c: '',
     img: '',
+    idActualSession: '',
     correct: '',
     selected: 'null',
+    wrongAnswers: 0,
+    correctAnswers: 0,
     numberQuestion: 0,
     lives: 5
   })
 
-  const { question, a, b, c, img, correct, numberQuestion, lives, selected } = questionObj
+  const { question, a, b, c, img, correct, numberQuestion, lives, selected, wrongAnswers, correctAnswers, idActualSession } = questionObj
+
+  const actualSession = JSON.parse(localStorage.getItem('ActualSession'))
+
 
   useEffect(() => {
     getData()
   }, [numberQuestion])
 
+
+
   const getData = () => {
     axios.get(url)
       .then(resp => {
         let data = resp.data
-        
 
-        if(data[numberQuestion] === undefined){
+
+        if (data[numberQuestion] === undefined) {
           handleReturn()
         }
 
@@ -54,6 +62,23 @@ const Questions = () => {
       })
   }
 
+  const verifySession = useMemo(() => {
+    if (actualSession === null) {
+      Swal.fire({
+        position: 'top',
+        icon: 'warning',
+        text: 'No has iniciado sesion, por lo cual tu progreso no sera guardado',
+        showConfirmButton: true
+      })
+    } else {
+      setQuestions({
+        ...questionObj,
+        idActualSession: actualSession.id
+      })
+    }
+  }, [])
+
+
   const handleChange = e => {
     setQuestions({
       ...questionObj,
@@ -64,7 +89,6 @@ const Questions = () => {
   const handleSubmit = e => {
     e.preventDefault();
     e.target.reset()
-    nextQuestion()
 
     if (selected === correct) {
       Swal.fire({
@@ -72,14 +96,21 @@ const Questions = () => {
         icon: 'success',
         title: 'Buen Trabajo',
         showConfirmButton: false,
-        timer: 1700
+        timer: 1000
       })
-
-    }else if(selected === "null"){
 
       setQuestions({
         ...questionObj,
-        numberQuestion: numberQuestion 
+        selected: 'null',
+        numberQuestion: numberQuestion + 1,
+        correctAnswers: correctAnswers + 1
+      })
+
+    } else if (selected === "null") {
+
+      setQuestions({
+        ...questionObj,
+        numberQuestion: numberQuestion
       })
 
       Swal.fire({
@@ -97,34 +128,41 @@ const Questions = () => {
         showConfirmButton: true
       })
 
-    }
-
-    
-
-  }
-
-  const nextQuestion = () => {
-
-    setQuestions({
-      ...questionObj,
-      selected: 'null',
-      numberQuestion: numberQuestion + 1
-    })
-
-    if(selected !== correct){
       setQuestions({
         ...questionObj,
         selected: 'null',
         numberQuestion: numberQuestion + 1,
-        lives: lives - 1
+        wrongAnswers: wrongAnswers + 1
       })
+
     }
   }
 
   const navigate = useNavigate()
 
   const handleReturn = () => {
+
+    updateStats()
+
     navigate(-1)
+  }
+
+  const updateStats = () => {
+
+    axios.put(urlUsers+idActualSession, {
+      ...actualSession,
+      correctAnswers,
+      wrongAnswers,
+      numberQuestion
+    })
+      .then(resp => {
+        console.log('Actualizado Correctamente')
+        let data = resp.data
+        localStorage.setItem('ActualSession', JSON.stringify(data))
+      })
+      .catch(error => console.log(error))
+
+    console.log('correctAnswers: ' + correctAnswers + '\n' + 'wrongAnswers: ' + wrongAnswers + '\n' + 'numberQuestions: ' + numberQuestion)
   }
 
   return (

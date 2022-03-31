@@ -55,7 +55,7 @@ const Perfil = () => {
   const navigate = useNavigate()
 
   const closeActualSession = () => {
-    localStorage.removeItem('ActualSession')
+    localStorage.clear()
     navigate("/login")
   }
 

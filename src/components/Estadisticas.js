@@ -1,6 +1,7 @@
-import React, { useState } from 'react'
+import React, { useMemo, useState } from 'react'
 import { BiTimeFive } from 'react-icons/bi'
 import { FiMessageCircle } from 'react-icons/fi'
+import Swal from 'sweetalert2'
 import { Option, Select, Title, ContainerEstd, Stats, CorrectAnswers, IncorrectAnswers, Paragraph } from '../styles/styledComp/estadisticas'
 
 const Estadisticas = () => {
@@ -9,14 +10,33 @@ const Estadisticas = () => {
 
   const [stats, setStats] = useState({
     studyTime: 0,
-    answersContested: 0,
+    questionsAnswered: 0,
     correctAnswers: 0,
     wrongAnswers: 0
   })
 
-  const {studyTime, answersContested, correctAnswers, wrongAnswers} = stats
+  const {studyTime, questionsAnswered, correctAnswers, wrongAnswers} = stats
   
-  
+  const verifySession = useMemo(() => {
+    if (actualSession === null) {
+      Swal.fire({
+        position: 'top',
+        icon: 'warning',
+        text: 'Tus estadisticas se mostraran cuando inicies sesión',
+        showConfirmButton: true
+      })
+    } else {
+
+      const {numberQuestion, correctAnswers, wrongAnswers} = actualSession
+
+      setStats({
+        ...stats,
+        questionsAnswered:  numberQuestion,
+        correctAnswers: correctAnswers,
+        wrongAnswers: wrongAnswers
+      })
+    }
+  }, [])
 
   return (
     <ContainerEstd>
@@ -34,7 +54,7 @@ const Estadisticas = () => {
         <Stats>
           <FiMessageCircle />
           <p>Respuestas contestadas</p>
-          <Paragraph>{answersContested}</Paragraph>
+          <Paragraph>{questionsAnswered}</Paragraph>
         </Stats>
         <Stats>
           <FiMessageCircle />
